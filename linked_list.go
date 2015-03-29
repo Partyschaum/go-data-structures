@@ -41,20 +41,37 @@ func (nodeList *NodeList) removeBeginning() error {
 }
 
 func main() {
-	nodeList := &NodeList{&Node{"first", nil}}
-	nodeList.insertAfter(
-		nodeList.firstNode,
-		&Node{"second", nil},
-	)
+	currentNode := &Node{"first", nil}
+	nodeList := &NodeList{currentNode}
 
-	fmt.Printf("nodeList: %+v\n", nodeList)
-	fmt.Printf("nodeList.firstNode: %+v\n", nodeList.firstNode)
-	fmt.Printf("nodeList.firstNode.next: %+v\n", nodeList.firstNode.next)
+	// add 100 nodes
+	for i := 0; i < 100; i++ {
+		newNode := &Node{"node" + strconv.Itoa(i), nil}
+		nodeList.insertAfter(currentNode, newNode)
+		fmt.Printf("Inserted %+v after %+v\n", newNode, currentNode)
+		currentNode = newNode
+	}
 
-	nodeList.insertBeginning(&Node{"third", nil})
+	currentNode = nodeList.firstNode
 
-	fmt.Printf("nodeList: %+v\n", nodeList)
-	fmt.Printf("nodeList.firstNode: %+v\n", nodeList.firstNode)
-	fmt.Printf("nodeList.firstNode.next: %+v\n", nodeList.firstNode.next)
-	fmt.Printf("nodeList.firstNode.next.next: %+v\n", nodeList.firstNode.next.next)
+	// remove evey second node
+	//for i := 0; i < 100; i++ {
+	i := 0
+	for currentNode != nil {
+		if i%2 != 0 {
+			continue
+		}
+		err := nodeList.removeAfter(currentNode)
+		if err != nil {
+			fmt.Println(err)
+		}
+		currentNode = currentNode.next
+	}
+
+	currentNode = nodeList.firstNode
+
+	for currentNode != nil {
+		fmt.Printf("%+v\n", currentNode)
+		currentNode = currentNode.next
+	}
 }
