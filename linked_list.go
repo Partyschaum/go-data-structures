@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"strconv"
+)
 
 type Node struct {
 	data string
@@ -20,6 +24,19 @@ func (nodeList *NodeList) insertAfter(node, newNode *Node) error {
 func (nodeList *NodeList) insertBeginning(newNode *Node) error {
 	newNode.next = nodeList.firstNode
 	nodeList.firstNode = newNode
+	return nil
+}
+
+func (nodeList *NodeList) removeAfter(node *Node) error {
+	if node.next == nil {
+		return errors.New("End of list")
+	}
+	node.next = node.next.next
+	return nil
+}
+
+func (nodeList *NodeList) removeBeginning() error {
+	nodeList.firstNode = nodeList.firstNode.next
 	return nil
 }
 

@@ -77,3 +77,54 @@ func TestNewNodeLinksToListsFormerFirstNode(t *testing.T) {
 		)
 	}
 }
+
+// removeAfter
+
+func TestNodeLinksToNodesNextNext(t *testing.T) {
+	resetNodes()
+
+	nodeList = &NodeList{firstNode}
+	nodeList.insertAfter(firstNode, secondNode)
+	nodeList.insertAfter(secondNode, thirdNode)
+
+	nodeList.removeAfter(firstNode)
+
+	if firstNode.next != thirdNode {
+		t.Errorf(
+			"Expected firstNode.next to be %+v, got %+v",
+			thirdNode,
+			firstNode.next,
+		)
+	}
+}
+
+func TestReturnsErrorIfNextNodeIsNil(t *testing.T) {
+	resetNodes()
+
+	nodeList = &NodeList{firstNode}
+
+	err := nodeList.removeAfter(firstNode)
+
+	if err == nil {
+		t.Error("Expected error")
+	}
+}
+
+// removeBeginning
+
+func TestNodeListFirstNodeLinksToFirstNodeNext(t *testing.T) {
+	resetNodes()
+
+	nodeList = &NodeList{firstNode}
+	nodeList.insertAfter(firstNode, secondNode)
+
+	nodeList.removeBeginning()
+
+	if nodeList.firstNode != secondNode {
+		t.Errorf(
+			"Expected nodeList.firstNode to be %+v, got %+v",
+			secondNode,
+			nodeList.firstNode,
+		)
+	}
+}
